@@ -1,0 +1,35 @@
+name: Honeyfile change alert
+on:
+  push:
+    paths:
+      - 'backups/PROD_DB/CREDENTIALS_BACKUP.md'
+  pull_request:
+    paths:
+      - 'backups/PROD_DB/CREDENTIALS_BACKUP.md'
+
+jobs:
+  honey-alert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get commit info
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Ref: $GITHUB_REF"
+          echo "Actor: $GITHUB_ACTOR"
+          echo "Commit: $GITHUB_SHA"
+      - name: Notify webhook (if set)
+        if: always()
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ secrets.HONEY_WEBHOOK_URL }}
+          method: 'POST'
+          contentType: 'application/json'
+          body: |
+            {
+              "repo": "${{ github.repository }}",
+              "ref": "${{ github.ref }}",
+              "actor": "${{ github.actor }}",
+              "sha": "${{ github.sha }}",
+              "file": "backups/PROD_DB/CREDENTIALS_BACKUP.md",
+              "event": "${{ github.event_name }}"
+            }
