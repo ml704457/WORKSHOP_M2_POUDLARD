@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><title>Admin - Submissions</title></head>
+<body>
+  <h1>Soumissions</h1>
+  <p>
+    <a href="{{ url_for('export_csv') }}">Télécharger CSV</a> |
+    <a href="{{ url_for('export_xlsx') }}">Télécharger XLSX</a>
+  </p>
+  <table border="1" cellpadding="6" cellspacing="0">
+    <tr><th>Prénom</th><th>Nom</th><th>Token</th><th>IP</th><th>User-Agent</th><th>Horodatage (UTC)</th></tr>
+    {% for r in rows %}
+      <tr>
+        <td>{{ r[0] }}</td><td>{{ r[1] }}</td><td>{{ r[2] }}</td><td>{{ r[3] }}</td><td>{{ r[4] }}</td><td>{{ r[5] }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

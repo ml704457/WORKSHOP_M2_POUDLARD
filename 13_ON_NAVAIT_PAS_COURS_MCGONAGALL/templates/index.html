@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Formulaire pédagogique</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; max-width: 700px; }
+    .flash { padding: 10px; border-radius: 4px; margin-bottom: 12px; }
+    .flash.success { background: #e6ffe6; border: 1px solid #2e8b57; }
+    .flash.error { background: #ffe6e6; border: 1px solid #c00; }
+    label { display:block; margin-top:8px; }
+    .consent { margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Exercice pédagogique — Formulaire volontaire</h1>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, msg in messages %}
+        <div class="flash {{ 'success' if category=='success' else 'error' }}">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <p>Ce formulaire collecte volontairement votre prénom et votre nom pour un exercice pédagogique. En cochant la case, vous consentez à la collecte et au stockage temporaire de ces données.</p>
+
+  <form method="post">
+    <label>Prénom<br><input type="text" name="firstname" required maxlength="100"></label>
+    <label>Nom<br><input type="text" name="lastname" required maxlength="100"></label>
+
+    <!-- token (correlation) -->
+    <input type="hidden" name="token_hidden" value="{{ token|e }}">
+
+    <label class="consent">
+      <input type="checkbox" name="consent" required> J'accepte la collecte de mes données pour l'exercice (consentement explicite)
+    </label>
+
+    <p><button type="submit">Envoyer</button></p>
+  </form>
+
+</body>
+</html>
